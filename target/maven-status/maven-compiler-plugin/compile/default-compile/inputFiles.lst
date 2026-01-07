@@ -1,9 +1,0 @@
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\controller\EventsController.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\dto\EventCreateRequest.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\dto\EventResponseDTO.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\entity\Event.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\EventServiceApplication.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\mapper\EventMapper.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\repository\EventRepository.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\service\IEventService.java
-c:\Users\Admin\IdeaProjects\event-service\src\main\java\kz\qonaqzhai\eventservice\service\impl\EventServiceImpl.java
