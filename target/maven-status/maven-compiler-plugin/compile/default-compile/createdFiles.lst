@@ -1,0 +1,10 @@
+kz\qonaqzhai\eventservice\EventServiceApplication.class
+kz\qonaqzhai\eventservice\dto\EventResponseDTO.class
+kz\qonaqzhai\eventservice\controller\EventsController.class
+kz\qonaqzhai\eventservice\repository\EventRepository.class
+kz\qonaqzhai\eventservice\service\IEventService.class
+kz\qonaqzhai\eventservice\service\impl\EventServiceImpl.class
+kz\qonaqzhai\eventservice\entity\Event.class
+kz\qonaqzhai\eventservice\mapper\EventMapperImpl.class
+kz\qonaqzhai\eventservice\dto\EventCreateRequest.class
+kz\qonaqzhai\eventservice\mapper\EventMapper.class
