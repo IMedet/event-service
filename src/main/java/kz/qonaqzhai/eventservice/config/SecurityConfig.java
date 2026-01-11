@@ -1,9 +1,13 @@
 package kz.qonaqzhai.eventservice.config;
 
+import kz.qonaqzhai.eventservice.security.InternalGatewayAuthFilter;
+import kz.qonaqzhai.eventservice.config.InternalGatewayAuthProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -21,10 +25,18 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties(InternalGatewayAuthProperties.class)
 public class SecurityConfig {
+
+    private final InternalGatewayAuthProperties internalGatewayAuthProperties;
+
+    public SecurityConfig(InternalGatewayAuthProperties internalGatewayAuthProperties) {
+        this.internalGatewayAuthProperties = internalGatewayAuthProperties;
+    }
 
     // Этот фильтр извлекает username из заголовка, добавленного шлюзом
     public static class GatewayUsernameFilter extends OncePerRequestFilter {
+
         @Override
         protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                 throws ServletException, IOException {
@@ -52,7 +64,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Отключаем CSRF для REST API
-            .addFilterBefore(new GatewayUsernameFilter(), UsernamePasswordAuthenticationFilter.class) // Добавляем наш фильтр
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(new InternalGatewayAuthFilter(internalGatewayAuthProperties), UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(new GatewayUsernameFilter(), InternalGatewayAuthFilter.class) // Добавляем наш фильтр
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/actuator/**").permitAll() // Разрешить доступ к эндпоинтам Actuator (опционально)
                 .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
