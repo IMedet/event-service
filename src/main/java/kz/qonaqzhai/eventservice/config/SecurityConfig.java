@@ -20,6 +20,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.Collections;
 
@@ -63,14 +64,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Отключаем CSRF для REST API
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(new InternalGatewayAuthFilter(internalGatewayAuthProperties), UsernamePasswordAuthenticationFilter.class)
-            .addFilterAfter(new GatewayUsernameFilter(), InternalGatewayAuthFilter.class) // Добавляем наш фильтр
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/actuator/**").permitAll() // Разрешить доступ к эндпоинтам Actuator (опционально)
-                .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
-            );
+                .csrf(csrf -> csrf.disable()) // Отключаем CSRF для REST API
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new InternalGatewayAuthFilter(internalGatewayAuthProperties), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new GatewayUsernameFilter(), InternalGatewayAuthFilter.class) // Добавляем наш фильтр
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/actuator/**").permitAll() // Разрешить доступ к эндпоинтам Actuator (опционально)
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
+                );
+
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
